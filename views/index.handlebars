@@ -1,0 +1,124 @@
+<style media="screen">
+    .lined-up {
+        margin-left: 20px;
+    }
+
+    li {
+        height: 20px;
+        width: 100px;
+        margin-bottom: 5px;
+        margin-right: 30px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .middle {
+        margin-left: 40%;
+        width: 20%;
+        padding: 10px;
+    }
+
+    .right {
+        float: right;
+    }
+</style>
+
+<h1>The Times</h1>
+
+<div style="text-align:center" class="middle_save">
+    <button onclick="savedArticles()" class="btn btn-primary submit" onmouseover="" style="cursor: pointer;">Saved articles</button>
+    <button onclick="scrapeArticles()" class="btn btn-primary submit" onmouseover="" style="cursor: pointer;">Scrape new articles</button>
+    <button onclick="clearArticles()" class="btn btn-primary submit" onmouseover="" style="cursor: pointer;">Clear articles</button>
+</div>
+
+{{#each aoNews}}
+<h3>{{heading}}</h3>
+<p>{{story}}</p>
+{{#if notSaved}}
+<button onclick="saveButton({{@index}})" class="saveButton" id={{this}} onmouseover="" style="cursor: pointer;">Save</button>
+{{/if}}
+<a class="right" href={{link}} text="Read more">Read More</a>
+<br>
+{{/each}}
+
+{{#if test}}
+<h3 style="margin-left: 70%">Eaten:</h3>
+{{/if}}
+
+<ul>
+    {{#each eaten}}
+    <li style="margin-left: 70%">{{this}}</li>
+    {{/each}}
+</ul>
+
+<script>
+
+    function saveButton(value) {
+        //console.log ("Save: ", value);
+        const buttonInput = {};
+        buttonInput.value = value;
+        const opts = {
+            method: "POST",
+            body: JSON.stringify(buttonInput),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        fetch("/save", opts).then(function (response) {
+            //            console.log (response.body);
+            return (response.text());
+        }).then(function (string) {
+            document.body.innerHTML = string;
+            //            location.reload ();
+        });
+    }
+   
+    // eslint-disable-next-line no-unused-vars
+    function scrapeArticles() {
+        let opts = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        fetch("/scrape", opts).then(function (response) {
+            return (response.text());
+        }).then(function (string) {
+            document.body.innerHTML = string;
+        });
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    function clearArticles() {
+        let opts = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        fetch("/clear", opts).then(function (response) {
+            return (response.text());
+        }).then(function (string) {
+            document.body.innerHTML = string;
+        });
+    }
+    // eslint-disable-next-line no-unused-vars
+    function savedArticles() {
+        let opts = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        fetch("/getSaved", opts).then(function (response) {
+            return (response.text());
+        }).then(function (string) {
+            document.body.innerHTML = string;
+        });
+    }
+
+//    <button style="float: left" style="display: inline" id={{this}} , onclick="devourButton(this)">Devour!</button>
+//    <li style="list-style-type:none; float: left" class="lined-up">{{@index}}: {{this}}</li>
+</script>
