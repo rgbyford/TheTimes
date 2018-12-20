@@ -1,6 +1,7 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 const routes = require ("./routes/routes.js");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ app.engine("handlebars", exphbs({
 }));
 app.set("view engine", "handlebars");
 
+app.use(express.static(path.join(__dirname, "/public")));
 app.use(routes);
 
 app.listen(PORT, function () {

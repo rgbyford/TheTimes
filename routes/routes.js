@@ -4,12 +4,20 @@ const dbFns = require("../config/connection.js");
 const cheerio = require("cheerio");
 const axios = require("axios");
 
+let aoNews = [];
+const siteURL = "https://www.thetimes.co.uk";
+
+let aoAlreadySaved = [];
+// get already saved stuff
+getAlreadySaved();
+async function getAlreadySaved() {
+    console.log("gAS");
+    aoAlreadySaved = await dbFns.getSaved();
+}
+
 router.get("/", function (req, res) {
     res.render("index", {});
 });
-
-let aoNews = [];
-const siteURL = "https://www.thetimes.co.uk"
 
 router.post("/save", function (req, res) {
     console.log("save");
@@ -35,6 +43,12 @@ router.post("/scrape", function (req, res) {
             let story = $(this).children().first().text();
             let link = siteURL + $(this).siblings("a").attr("href");
             let notSaved = true;
+            for (let j = 0; j < aoAlreadySaved.length; j++) { // check if already saved
+                if (aoAlreadySaved[j].heading === heading) {
+                    notSaved = false;
+                    break;
+                }
+            }
             if (i < 10) { // keep 10 stories
                 aoNews.push({
                     heading: heading,
@@ -44,9 +58,6 @@ router.post("/scrape", function (req, res) {
                 });
             }
         });
-
-        //console.log("Stories: ", aoNews.length);
-        // console.log (aoNews);
         res.render("index", {
             aoNews: aoNews
         });
@@ -62,11 +73,23 @@ router.post("/clear", function (req, res) {
     });
 });
 
-router.post("/getSaved", async (req, res) =>{
+router.post("/getSaved", async (req, res) => {
     aoNews = await dbFns.getSaved();
     for (let i = 0; i < aoNews.length; i++) {
         aoNews[i].notSaved = false;
     }
+    res.render("index", {
+        aoNews: aoNews
+    });
+});
+
+router.post("/note", function (req, res) {
+    console.log("note");
+    console.log("articleNum: ", req.body.value);
+    console.log("text: ", req.body.text);
+
+    aoNews[req.body.value].note = req.body.text;
+    aoNews[req.body.value].notSaved = true;
     res.render("index", {
         aoNews: aoNews
     });
