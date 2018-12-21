@@ -1,19 +1,22 @@
 let express = require("express");
 let router = express.Router();
-const dbFns = require("../config/connection.js");
+const dbStuff = require("../config/connection.js");
 const cheerio = require("cheerio");
 const axios = require("axios");
 
 let aoNews = [];
 const siteURL = "https://www.thetimes.co.uk";
 
-let aoAlreadySaved = [];
-// get already saved stuff
-getAlreadySaved();
-async function getAlreadySaved() {
-    console.log("gAS");
-    aoAlreadySaved = await dbFns.getSaved();
-}
+//let aoAlreadySaved = [];
+// const getAlreadySaved = async () => {
+// //async function getAlreadySaved() {
+//     console.log("gAS");
+//     aoAlreadySaved = await dbStuff.getSaved();
+// }
+
+// router.setAlreadySaved (function (aoArticles) {
+//     aoAlreadySaved = aoArticles;
+// });
 
 router.get("/", function (req, res) {
     res.render("index", {});
@@ -23,7 +26,7 @@ router.post("/save", function (req, res) {
     console.log("save");
     console.log("rbv: ", aoNews[req.body.value]);
 
-    dbFns.insertArticle(aoNews[req.body.value]);
+    dbStuff.insertArticle(aoNews[req.body.value]);
     aoNews[req.body.value].notSaved = false;
     res.render("index", {
         aoNews: aoNews
@@ -43,8 +46,8 @@ router.post("/scrape", function (req, res) {
             let story = $(this).children().first().text();
             let link = siteURL + $(this).siblings("a").attr("href");
             let notSaved = true;
-            for (let j = 0; j < aoAlreadySaved.length; j++) { // check if already saved
-                if (aoAlreadySaved[j].link === link) {
+            for (let j = 0; j < dbStuff.aoAlreadySaved.length; j++) { // check if already saved
+                if (dbStuff.aoAlreadySaved[j].link === link) {
                     notSaved = false;
                     break;
                 }
@@ -74,7 +77,7 @@ router.post("/clear", function (req, res) {
 });
 
 router.post("/getSaved", async (req, res) => {
-    aoNews = await dbFns.getSaved();
+    aoNews = await dbStuff.getSaved();
     for (let i = 0; i < aoNews.length; i++) {
         aoNews[i].notSaved = false;
     }
@@ -96,3 +99,8 @@ router.post("/note", function (req, res) {
 });
 
 module.exports = router;
+//module.exports.setAlreadySaved = setAlreadySaved;
+// module.exports = {
+//     router,
+//     aoAlreadySaved
+// };

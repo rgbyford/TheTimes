@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-
+//const routes = require ("../routes/routes.js");
+//require ("../routes/routes.js");
+//require ("../routes/routes.js");
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/news";
 
 mongoose.connect(MONGODB_URI, {
@@ -7,6 +9,7 @@ mongoose.connect(MONGODB_URI, {
 });
 
 let Article;
+let aoAlreadySaved = [];
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -19,7 +22,16 @@ db.once("open", function () {
         note: String
     });
     Article = mongoose.model("Article", articleSchema);
+    aoAlreadySaved = Article.find();
 });
+
+const getSaved = async () => {
+    return (Article.find());
+};
+
+// set already saved stuff
+//routes.getAlreadySaved();
+
 
 function insertArticle(oArticle) {
     console.log("iA: ");
@@ -52,9 +64,7 @@ function insertArticle(oArticle) {
     }
 }
 
-const getSaved = async () => {
-    return (Article.find());
-};
 
 module.exports.insertArticle = insertArticle;
 module.exports.getSaved = getSaved;
+module.exports.aoAlreadySaved = aoAlreadySaved;
