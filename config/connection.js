@@ -29,7 +29,7 @@ function insertArticle(oArticle) {
     // otherwise do an insert
     let notSaved = true;
     for (let j = 0; j < aoAlreadySaved.length; j++) { // check if already saved
-        if (aoAlreadySaved[j].heading === dbArticle.heading) {
+        if (aoAlreadySaved[j].link === dbArticle.link) { //not headlines because they change!
             notSaved = false;
             break;
         }

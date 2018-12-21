@@ -44,7 +44,7 @@ router.post("/scrape", function (req, res) {
             let link = siteURL + $(this).siblings("a").attr("href");
             let notSaved = true;
             for (let j = 0; j < aoAlreadySaved.length; j++) { // check if already saved
-                if (aoAlreadySaved[j].heading === heading) {
+                if (aoAlreadySaved[j].link === link) {
                     notSaved = false;
                     break;
                 }
