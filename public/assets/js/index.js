@@ -9,7 +9,13 @@ let modal;
 function takeNote(articleNum) {
     // Get the modal
     modal = document.getElementById("noteModal");
-    // Get the <span> element that closes the modal
+    if (notes[articleNum] === undefined || notes[articleNum] === "") {
+        notes[articleNum] = document.getElementById(`note${articleNum}`).textContent;
+        console.log ("Attaching node: ", notes[articleNum]);
+    }
+    else {
+        console.log ("Note already attached: ", notes[articleNum]);
+    }
     console.log("take note article: ", articleNum);
     document.getElementById("theNote").value = (notes[articleNum] !== undefined ? notes[articleNum] : "");
     article = articleNum;

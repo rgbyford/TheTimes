@@ -7,47 +7,25 @@ const axios = require("axios");
 let aoNews = [];
 const siteURL = "https://www.thetimes.co.uk";
 
-//let aoAlreadySaved = [];
-// const getAlreadySaved = async () => {
-// //async function getAlreadySaved() {
-//     console.log("gAS");
-//     aoAlreadySaved = await dbStuff.getSaved();
-// }
-
-// router.setAlreadySaved (function (aoArticles) {
-//     aoAlreadySaved = aoArticles;
-// });
-
-router.get("/", function (req, res) {
-    res.render("index", {});
-});
-
-router.post("/save", function (req, res) {
-    console.log("save");
-    console.log("rbv: ", aoNews[req.body.value]);
-
-    dbStuff.insertArticle(aoNews[req.body.value]);
-    aoNews[req.body.value].notSaved = false;
-    res.render("index", {
-        aoNews: aoNews
-    });
-});
-
-router.post("/scrape", function (req, res) {
+async function scrapeStuffAndRender (res) {
     console.log("scrape");
+    const aoAlreadySaved = await dbStuff.getSaved();
+
+    // console.log (dbStuff.aoAlreadySaved);
     // Making a request via axios for The Times. The page"s HTML is passed as the callback"s third argument
     axios.get(siteURL).then(function (response) {
         // Load the HTML into cheerio and save it to a variable
         // "$" becomes a shorthand for cheerio"s selector commands, much like jQuery"s "$"
         let $ = cheerio.load(response.data);
-
+        aoNews.length = 0; // get rid of old stuff
         $("p.Item-dip").each(function (i) {
             let heading = $(this).siblings("h3.Item-headline").text();
             let story = $(this).children().first().text();
             let link = siteURL + $(this).siblings("a").attr("href");
             let notSaved = true;
-            for (let j = 0; j < dbStuff.aoAlreadySaved.length; j++) { // check if already saved
-                if (dbStuff.aoAlreadySaved[j].link === link) {
+            //console.log ("aoAS length = ", aoAlreadySaved.length);
+            for (let j = 0; j < aoAlreadySaved.length; j++) { // check if already saved
+                if (aoAlreadySaved[j].link === link) {
                     notSaved = false;
                     break;
                 }
@@ -66,7 +44,28 @@ router.post("/scrape", function (req, res) {
         });
     });
     return;
+}
+
+router.get("/", function (req, res) {
+    scrapeStuffAndRender(res);
+//    res.render("index", {});
 });
+
+router.post("/save", function (req, res) {
+    console.log("save");
+    //    console.log("rbv: ", aoNews[req.body.value]);
+
+    dbStuff.insertArticle(aoNews[req.body.value]);
+    aoNews[req.body.value].notSaved = false;
+    res.render("index", {
+        aoNews: aoNews
+    });
+});
+
+router.post("/scrape", function (req, res) {
+    scrapeStuffAndRender (res);
+});
+
 
 router.post("/clear", function (req, res) {
     console.log("clear");
