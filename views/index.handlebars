@@ -1,4 +1,3 @@
-
 <h1>The Times</h1>
 
 <div style="text-align:center" class="middle_save">
@@ -11,16 +10,25 @@
 </div>
 
 {{#each aoNews}}
+<br>
 <h3>{{heading}}</h3>
 <p>{{story}}</p>
 {{#if notSaved}}
 <button onclick="saveArticleButton({{@index}})" class="saveArticleButton" id={{this}} onmouseover="" style="cursor: pointer;">Save</button>
 {{/if}}
 <div class="noDisplay" id="note{{@index}}">{{note}}</div>
-<button class="middle" onclick="takeNote({{@index}})" id="takeNote" onmouseover="" style="cursor: pointer;">{{#if note}}Edit note{{else}}Add a note{{/if}}</button>
+<button class="middle" onclick="takeNote({{@index}})" id="takeNote" onmouseover="" style="cursor: pointer;">{{#if
+    note}}Edit note{{else}}Add a note{{/if}}</button>
 <a class="right" href={{link}} text="Read more">Read More</a>
 <br>
 {{/each}}
+
+<footer class="footer-classic fixed-bottom text-center bg-light">
+    <div class="panel panel-default">
+        <div class="panel-heading">&nbsp</div>
+        <div class="panel-body">Material taken from The Times</div>
+    </div>
+</footer>
 
 <!-- The Modal -->
 <div id="noteModal" class="modal">

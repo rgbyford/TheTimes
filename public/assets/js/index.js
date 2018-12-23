@@ -1,11 +1,8 @@
+/* eslint-disable no-unused-vars */
 let article;
 let notes = [];
 let modal;
-//let span;
-//span = document.getElementsByClassName("closeNote")[0];
 
-// When the user clicks on the button, open the modal
-// eslint-disable-next-line no-unused-vars
 function takeNote(articleNum) {
     // Get the modal
     modal = document.getElementById("noteModal");
@@ -22,9 +19,6 @@ function takeNote(articleNum) {
     modal.style.display = "block";
 }
 
-// When the user clicks on <span> (x), close the modal
-//span.onclick = function () {
-// eslint-disable-next-line no-unused-vars
 function closeModal() {
     document.getElementById("theNote").value = ""; // empty out any crap
     modal.style.display = "none";
@@ -37,7 +31,6 @@ window.onclick = function (event) {
     }
 };
 
-// eslint-disable-next-line no-unused-vars
 function submitNote() {
     const text = document.getElementById("theNote").value;
     console.log("note submit");
@@ -64,7 +57,6 @@ function submitNote() {
 
 }
 
-// eslint-disable-next-line no-unused-vars
 function saveArticleButton(value) {
     //console.log ("Save: ", value);
     const buttonInput = {};
@@ -85,7 +77,6 @@ function saveArticleButton(value) {
     });
 }
 
-// eslint-disable-next-line no-unused-vars
 function scrapeArticles() {
     let opts = {
         method: "POST",
@@ -100,7 +91,6 @@ function scrapeArticles() {
     });
 }
 
-// eslint-disable-next-line no-unused-vars
 function clearArticles() {
     let opts = {
         method: "POST",
@@ -114,7 +104,7 @@ function clearArticles() {
         document.body.innerHTML = string;
     });
 }
-// eslint-disable-next-line no-unused-vars
+
 function savedArticles() {
     let opts = {
         method: "POST",

@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-//const routes = require ("../routes/routes.js");
-//require ("../routes/routes.js");
-//require ("../routes/routes.js");
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/news";
 
 mongoose.connect(MONGODB_URI, {
@@ -31,12 +28,7 @@ const getSaved = async () => {
     return (Article.find());
 };
 
-// set already saved stuff
-//routes.getAlreadySaved();
-
-
 function insertArticle(oArticle) {
-    //    console.log("iA: ");
     let dbArticle = new Article(oArticle);
     console.log("insertArticle link: ", dbArticle.link);
     // if it is in already saved, do an update to the note.
@@ -50,7 +42,7 @@ function insertArticle(oArticle) {
     }
 
     if (notSaved) { // insert
-        console.log("Not here - add to AlreadySaved");
+        // console.log("Not here - add to AlreadySaved");
         aoAlreadySaved.push(oArticle);
         dbArticle.save(function (err) {
             if (err) {
@@ -59,8 +51,8 @@ function insertArticle(oArticle) {
             //            console.log(dbArticle);
         });
     } else {
-        console.log("Already here - update");
-        console.log("Note: ", oArticle.note);
+        // console.log("Already here - update");
+        // console.log("Note: ", oArticle.note);
         let conditions = {
             link: oArticle.link
         };
@@ -81,8 +73,7 @@ function udCallback(err, numAffected) {
     console.log("udC updated count: ", numAffected);
 }
 
-
-
-module.exports.insertArticle = insertArticle;
-module.exports.getSaved = getSaved;
-//module.exports.aoAlreadySaved = aoAlreadySaved;
+module.exports = {
+    insertArticle: insertArticle,
+    getSaved: getSaved
+}

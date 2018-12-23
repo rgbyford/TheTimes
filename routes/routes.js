@@ -48,11 +48,10 @@ async function scrapeStuffAndRender (res) {
 
 router.get("/", function (req, res) {
     scrapeStuffAndRender(res);
-//    res.render("index", {});
 });
 
 router.post("/save", function (req, res) {
-    console.log("save");
+    // console.log("save");
     //    console.log("rbv: ", aoNews[req.body.value]);
 
     dbStuff.insertArticle(aoNews[req.body.value]);
@@ -68,7 +67,7 @@ router.post("/scrape", function (req, res) {
 
 
 router.post("/clear", function (req, res) {
-    console.log("clear");
+    // console.log("clear");
     aoNews.length = 0;
     res.render("index", {
         aoNews: aoNews
@@ -98,8 +97,3 @@ router.post("/note", function (req, res) {
 });
 
 module.exports = router;
-//module.exports.setAlreadySaved = setAlreadySaved;
-// module.exports = {
-//     router,
-//     aoAlreadySaved
-// };
